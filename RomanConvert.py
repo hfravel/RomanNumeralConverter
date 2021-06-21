@@ -8,9 +8,9 @@ romanNums = {
     "M" : 1000
 }
 
-shortRomans = ("I", "V", "X", "L", "C", "D", "M")
 romans = ( "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
 integs = (1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1)
+shortRomans = ["I", "V", "X", "L", "C", "D", "M"]
 
 def romanToInt(num):
     total = 0
@@ -85,6 +85,8 @@ def intToRoman(num):
 
 
 #Start of testing area
+
+# This checks all the Roman Numerals in the range 1-3999 to see if my converters work.
 tot = True
 for i in range(1, 4000):
     r = intToRoman(i)
@@ -93,9 +95,9 @@ for i in range(1, 4000):
         print("{}: {}: {}.".format(i, r, n))
 print("Successful 1-3999 loop if not print statements above.")
 
-for x in romanNums:
-    print(x)
 
+# This is the area where I tried my best to test certain errors by hand
+# and was unable to find negative results.
 number = raw_input("Give a Roman Numeral: ")
 while number != "q":
     ans = romanToInt(number)
@@ -104,3 +106,30 @@ while number != "q":
     else:
         print("Roman: {}, Number: {}.".format(number, ans))
     number = raw_input("Give a Roman Numeral: ")
+
+# This is a really inefficient, illogical, and too long to run test for all possible combinations.
+# There are 15 nested loops because the longest Roman Numeral possile is MMMDCCCLXXXVIII = 3888.
+"""
+shortRomans.append("")
+for a1 in shortRomans:
+    for a2 in shortRomans:
+        for a3 in shortRomans:
+            for a4 in shortRomans:
+                for a5 in shortRomans:
+                    for a6 in shortRomans:
+                        for a7 in shortRomans:
+                            for a8 in shortRomans:
+                                for a9 in shortRomans:
+                                    for aa in shortRomans:
+                                        for ab in shortRomans:
+                                            for ac in shortRomans:
+                                                for ad in shortRomans:
+                                                    for ae in shortRomans:
+                                                        for af in shortRomans:
+                                                            romTest = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + aa + ab + ac + ad + ae + af
+                                                            nTITest = romanToInt(romTest)
+                                                            if nTITest != 0:
+                                                               iTNTest = IntToRoman(nTITest)
+                                                               if iTNTest != romTest:
+                                                                   print("Test Roman: {}, Result: {}, Result's Result: {}".format(romTest, nTITest, iTNTest))
+"""
