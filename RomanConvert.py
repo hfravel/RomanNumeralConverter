@@ -8,6 +8,7 @@ romanNums = {
     "M" : 1000
 }
 
+shortRomans = ("I", "V", "X", "L", "C", "D", "M")
 romans = ( "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
 integs = (1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1)
 
@@ -16,8 +17,14 @@ def romanToInt(num):
     prev = 9999
     curr = 0
     repeat = 0
+    
     # Loops through each character of the string num
     for x in num:
+        # If there is a character that is not I, V, X, L, C, D, or M then it is not valid.
+        if x not in shortRomans:
+            total = 0
+            break
+        
         # Saves the curr value of the current letter
         curr = romanNums[x]
         
@@ -44,12 +51,17 @@ def romanToInt(num):
             if repeat > 1:
                 total = 0
                 break
-            # if the previous is false then the previous number must be cancelled out and subtracted.
-            else:
+            # Because of hwo the patterns and math works out, the previous letter must be 1/5 or 1/10 or the current.
+            elif (curr / prev == 5) or (curr / prev == 10):    
                 total -= 2 * prev
                 total += curr
                 repeat = 1
+            # If neither of the above two are true then this roman numeral is a fake one.
+            else:
+                total = 0
+                break
 
+        # End of the loop where we assign previous to current
         prev = curr
     
     return total
@@ -69,16 +81,26 @@ def intToRoman(num):
                 num -= integs[x] * amt
                 break
     
-    #prints the roman numeral
-    #print(romanNum)
     return romanNum
 
+
+#Start of testing area
 tot = True
 for i in range(1, 4000):
     r = intToRoman(i)
     n = romanToInt(r)
     if n!= i:
         print("{}: {}: {}.".format(i, r, n))
+print("Successful 1-3999 loop if not print statements above.")
 
-#number = raw_input("Give a Roman Numeral: ")
-#romanToInt(number)
+for x in romanNums:
+    print(x)
+
+number = raw_input("Give a Roman Numeral: ")
+while number != "q":
+    ans = romanToInt(number)
+    if ans == 0:
+        print("Invalid: {}.".format(number))
+    else:
+        print("Roman: {}, Number: {}.".format(number, ans))
+    number = raw_input("Give a Roman Numeral: ")
