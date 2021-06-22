@@ -9,8 +9,8 @@ romanNums = {
 }
 
 romans = ( "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
-integs = (1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1)
-shortRomans = ["I", "V", "X", "L", "C", "D", "M"]
+romanInts = (1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1)
+romanChars = ["I", "V", "X", "L", "C", "D", "M"]
 
 def romanToInt(num):
     total = 0
@@ -21,7 +21,7 @@ def romanToInt(num):
     # Loops through each character of the string num
     for x in num:
         # If there is a character that is not I, V, X, L, C, D, or M then it is not valid.
-        if x not in shortRomans:
+        if x not in romanChars:
             total = 0
             break
         
@@ -74,11 +74,11 @@ def intToRoman(num):
     while num > 0:
         #Loops though the possible number combinations until one is equal to or less than
         for x in range(romanlen):
-            if num >= integs[x]:
+            if num >= romanInts[x]:
                 #if it is divisible, to save time why not add it that many times.
-                amt = num / integs[x]
+                amt = num / romanInts[x]
                 romanNum += romans[x] * amt
-                num -= integs[x] * amt
+                num -= romanInts[x] * amt
                 break
     
     return romanNum
@@ -110,22 +110,22 @@ while number != "q":
 # This is a really inefficient, illogical, and too long to run test for all possible combinations.
 # There are 15 nested loops because the longest Roman Numeral possile is MMMDCCCLXXXVIII = 3888.
 """
-shortRomans.append("")
-for a1 in shortRomans:
-    for a2 in shortRomans:
-        for a3 in shortRomans:
-            for a4 in shortRomans:
-                for a5 in shortRomans:
-                    for a6 in shortRomans:
-                        for a7 in shortRomans:
-                            for a8 in shortRomans:
-                                for a9 in shortRomans:
-                                    for aa in shortRomans:
-                                        for ab in shortRomans:
-                                            for ac in shortRomans:
-                                                for ad in shortRomans:
-                                                    for ae in shortRomans:
-                                                        for af in shortRomans:
+romanChars.append("")
+for a1 in romanChars:
+    for a2 in romanChars:
+        for a3 in romanChars:
+            for a4 in romanChars:
+                for a5 in romanChars:
+                    for a6 in romanChars:
+                        for a7 in romanChars:
+                            for a8 in romanChars:
+                                for a9 in romanChars:
+                                    for aa in romanChars:
+                                        for ab in romanChars:
+                                            for ac in romanChars:
+                                                for ad in romanChars:
+                                                    for ae in romanChars:
+                                                        for af in romanChars:
                                                             romTest = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + aa + ab + ac + ad + ae + af
                                                             nTITest = romanToInt(romTest)
                                                             if nTITest != 0:
