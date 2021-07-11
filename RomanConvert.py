@@ -12,8 +12,74 @@ romans = ( "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"
 romanInts = (1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1)
 romanChars = ["I", "V", "X", "L", "C", "D", "M"]
 
+def romanToInt2(num):
+    # total is for the final value, repeat is how many times a letter has 
+    # been repeated curr is the current letter value, prev is the previous 
+    # letter value, and pprev is the previous previous letter value.
+    total = 0
+    curr = 0
+    prev = 0
+    pprev = 0
+    repeat = 0
+    numLen = len(num)
+    
+    # No roman numeral has a longer length than 15.
+    if numLen > 15:
+        return 0
+    
+    # Loops through all letters of num, and returns 0 for an invalid
+    # roman numeral.
+    for i in range(0, numLen):
+        # Invalid character detection.
+        if num[i] not in romanChars:
+            return 0
+        
+        # Sets curr to the current value of the current letter.
+        curr = romanNums[num[i]]
+        
+        # If the previous set of letter looks like this: (IV, IX, XL,
+        # XC, CD, CM) then the curr letter must be less then the
+        # previous letter.
+        if pprev < prev:
+            if pprev < curr:
+                repeat = 1
+                total += curr
+            else:
+                return 0
+        # The curr letter can only be greater than the prev one if it is
+        # of the form (IV, IX, XL, XC, CD, CM).        
+        elif prev < curr:
+            if prev in (1, 10 ,100) and curr / prev in (5, 10):
+                repeat = 1
+                total -= 2 * prev
+                total += curr
+            else:
+                return 0
+        # Easiest case: add to total and reset repeat value if curr is
+        # less than prev.
+        elif prev > curr:
+            repeat = 1
+            total += curr
+        # If curr is equal to prev then the letter cannot be repeated
+        # more than 3 times and V, L, D cannot be repeated at all.
+        else:
+            if repeat >= 3 or curr in (5, 50, 500):
+                return 0
+            else:
+                repeat += 1
+                total += curr
+        
+        # End of the loop so curr becomes prev and prev becomes pprev.
+        prev = curr
+        pprev = prev
+    
+    # If it makes it here the roman numeral value is stored in total
+    # and there were no errors.
+    return total
+
 def romanToInt(num):
     total = 0
+    pprev = 9999
     prev = 9999
     curr = 0
     repeat = 0
