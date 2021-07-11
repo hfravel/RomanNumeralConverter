@@ -114,8 +114,8 @@ for i in range(1, 4000):
 print("Successful 1-3999 loop if not print statements above.")
 
 
-print(romanToInt(""))
-
+#print(romanToInt(""))
+"""
 # This is the area where I tried my best to test certain errors by hand
 # and was unable to find negative results.
 number = raw_input("Give a Roman Numeral: ")
@@ -126,35 +126,26 @@ while number != "q":
     else:
         print("Roman: {}, Number: {}.".format(number, ans))
     number = raw_input("Give a Roman Numeral: ")
+"""
 
 
-# This is a really inefficient, illogical, and too long to run test for all possible combinations.
-# There are 15 nested loops because the longest Roman Numeral possile is MMMDCCCLXXXVIII = 3888.
-romanChars.insert(0, "")
-for a1 in romanChars:
-    for a2 in romanChars:
-        for a3 in romanChars:
-            for a4 in romanChars:
-                for a5 in romanChars:
-                    for a6 in romanChars:
-                        for a7 in romanChars:
-                            romTest = a1 + a2 + a3 + a4 + a5 + a6 + a7
-                            rTITest = romanToInt(romTest)
-                            if rTITest != 0 and rTITest < 4000:
-                                iTRTest = intToRoman(rTITest)
-                                if iTRTest != romTest:
-                                    print("Test Roman: {}, Result: {}, Result's Result: {}".format(romTest, rTITest, iTRTest))
-#                            for a8 in romanChars:
-#                                for a9 in romanChars:
-#                                    for aa in romanChars:
-#                                        for ab in romanChars:
-#                                            for ac in romanChars:
-#                                                for ad in romanChars:
-#                                                    for ae in romanChars:
-#                                                        for af in romanChars:
-#                                                            romTest = a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8 + a9 + aa + ab + ac + ad + ae + af
-#                                                            rTITest = romanToInt(romTest)
-#                                                            if rTITest != 0 and rTITest < 4000:
-#                                                               iTRTest = intToRoman(rTITest)
-#                                                               if iTRTest != romTest:
-#                                                                   print("Test Roman: {}, Result: {}, Result's Result: {}".format(romTest, rTITest, iTRTest))
+# The longest roman numeral is 15 digits. So D can be [2..16] looping through
+# just 1 digit or all the way up to 15 digits.
+D = 8
+N = 7
+for i in range(1, D):
+    # There are seven possible roman numerals (I, V, X, L, C, D, M).
+    # This loops through all possible combinations (this number system is close to base seven).
+    for j in range (0, N**i):
+        num = j
+        romanNum = ""
+        # This translates the base seven number into roman numerals.
+        for k in range(i-1, -1, -1):
+            numMod = num / (N**k)
+            num = num % (N**k)
+            romanNum += romanChars[numMod]
+        resultInt = romanToInt(romanNum)
+        resultRom = intToRoman(resultInt)
+        if (resultRom != romanNum and not (resultInt == 0 and resultRom == "")):
+            print("Created: {}, Num: {}, Real: {}".format(romanNum, resultInt, resultRom))
+        #print("Dig: {}; Num: {}; {}.".format(i, j, romanNum))
