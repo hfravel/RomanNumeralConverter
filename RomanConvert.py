@@ -21,6 +21,7 @@ def romanToInt2(num):
     prev = 0
     pprev = 0
     repeat = 0
+    maxx = 9000
     numLen = len(num)
     
     # No roman numeral has a longer length than 15.
@@ -40,8 +41,8 @@ def romanToInt2(num):
         # If the previous set of letter looks like this: (IV, IX, XL,
         # XC, CD, CM) then the curr letter must be less then the
         # previous letter.
-        if pprev < prev:
-            if pprev < curr:
+        if i > 1 and pprev < prev and repeat < 2:
+            if pprev > curr:
                 repeat = 1
                 total += curr
             else:
@@ -49,34 +50,51 @@ def romanToInt2(num):
         # The curr letter can only be greater than the prev one if it is
         # of the form (IV, IX, XL, XC, CD, CM).        
         elif prev < curr:
-            if prev in (1, 10 ,100) and curr / prev in (5, 10):
+            if i == 0:
                 repeat = 1
-                total -= 2 * prev
                 total += curr
+            elif repeat > 1:
+                return 0
+            elif prev in (1, 10 ,100) and curr / prev in (5, 10):
+                if curr > maxx or (pprev == curr and curr in (5,50,500)) or (curr == maxx and curr in (5, 50, 500)):
+                    return 0
+                else:
+                    repeat = 1
+                    total -= 2 * prev
+                    total += curr
+                    maxx = curr
             else:
                 return 0
         # Easiest case: add to total and reset repeat value if curr is
         # less than prev.
         elif prev > curr:
-            repeat = 1
-            total += curr
+            if curr > maxx:
+                return 0
+            else:
+                repeat = 1
+                total += curr
+                maxx = prev
         # If curr is equal to prev then the letter cannot be repeated
         # more than 3 times and V, L, D cannot be repeated at all.
-        else:
+        elif prev == curr:
             if repeat >= 3 or curr in (5, 50, 500):
                 return 0
             else:
                 repeat += 1
+                maxx = curr
                 total += curr
+        else:
+            return 0
         
         # End of the loop so curr becomes prev and prev becomes pprev.
-        prev = curr
         pprev = prev
+        prev = curr
     
     # If it makes it here the roman numeral value is stored in total
     # and there were no errors.
     return total
 
+"""
 def romanToInt(num):
     total = 0
     pprev = 9999
@@ -149,7 +167,10 @@ def romanToInt(num):
         prev = curr
     
     return total
+"""
 
+# Takes as input a integer and returns a string representing
+# the roman numeral.
 def intToRoman(num):
     romanlen = len(romans)
     romanNum = ""
@@ -171,16 +192,14 @@ def intToRoman(num):
 #Start of testing area
 
 # This checks all the Roman Numerals in the range 1-3999 to see if my converters work.
-tot = True
 for i in range(1, 4000):
     r = intToRoman(i)
-    n = romanToInt(r)
+    n = romanToInt2(r)
     if n!= i:
         print("{}: {}: {}.".format(i, r, n))
 print("Successful 1-3999 loop if not print statements above.")
 
 
-#print(romanToInt(""))
 """
 # This is the area where I tried my best to test certain errors by hand
 # and was unable to find negative results.
@@ -194,10 +213,9 @@ while number != "q":
     number = raw_input("Give a Roman Numeral: ")
 """
 
-
 # The longest roman numeral is 15 digits. So D can be [2..16] looping through
 # just 1 digit or all the way up to 15 digits.
-D = 8
+D = 9
 N = 7
 for i in range(1, D):
     # There are seven possible roman numerals (I, V, X, L, C, D, M).
@@ -210,8 +228,9 @@ for i in range(1, D):
             numMod = num / (N**k)
             num = num % (N**k)
             romanNum += romanChars[numMod]
-        resultInt = romanToInt(romanNum)
+        resultInt = romanToInt2(romanNum)
         resultRom = intToRoman(resultInt)
         if (resultRom != romanNum and not (resultInt == 0 and resultRom == "")):
             print("Created: {}, Num: {}, Real: {}".format(romanNum, resultInt, resultRom))
         #print("Dig: {}; Num: {}; {}.".format(i, j, romanNum))
+
