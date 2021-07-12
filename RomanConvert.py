@@ -8,6 +8,14 @@ romanNums = {
     "M" : 1000
 }
 
+I = 1
+V = 5
+X = 10
+L = 50
+C = 100
+D = 500
+M = 1000
+
 romans = ( "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
 romanInts = (1000,  900, 500,  400, 100,   90,  50,   40,  10,    9,   5,    4,   1)
 romanChars = ["I", "V", "X", "L", "C", "D", "M"]
@@ -51,7 +59,7 @@ def romanToInt2(num):
         # Cases: (IV, IX, XL, XC, CD, CM)
         # Further explained in the loop.
         elif pprev < prev:
-            if pprev in (1, 10, 100) and (prev / pprev in (5, 10)):
+            if pprev in (I, X, C) and (prev / pprev in (5, 10)):
                 repeat = 1
                 total = prev - pprev
                 maxx = prev
@@ -60,7 +68,7 @@ def romanToInt2(num):
         # Cases: (II, XX, CC, MM)
         # Further explained in the loop.
         else:
-            if prev in (1, 10, 100, 1000):
+            if prev in (I, X, C, M):
                 repeat = 2
                 total = 2 * prev
                 maxx = prev
@@ -90,12 +98,13 @@ def romanToInt2(num):
             else:
                 return 0
         # The curr letter can only be greater than the prev one if it is
-        # of the form (IV, IX, XL, XC, CD, CM).        
+        # of the form (IV, IX, XL, XC, CD, CM), so the curr letter
+        # divided by the prev letter must be 5 or 10.
         elif prev < curr:
             if repeat > 1:
                 return 0
-            elif prev in (1, 10 ,100) and curr / prev in (5, 10):
-                if curr > maxx or (curr == maxx and curr in (5, 50, 500)):
+            elif prev in (I, X, C) and curr / prev in (5, 10):
+                if curr > maxx or (curr == maxx and curr in (V, L, D)):
                     return 0
                 else:
                     repeat = 1
@@ -116,7 +125,7 @@ def romanToInt2(num):
         # If curr is equal to prev then the letter cannot be repeated
         # more than 3 times and V, L, D cannot be repeated at all.
         elif prev == curr:
-            if repeat >= 3 or curr in (5, 50, 500):
+            if repeat >= 3 or curr in (V, L, D):
                 return 0
             else:
                 repeat += 1
@@ -165,9 +174,9 @@ for i in range(1, 4000):
         print("{}: {}: {}.".format(i, r, n))
         tot = False
 if tot:
-    print("Roman Numeral converters were successful for numbers 1-3999.")
+    print("Roman Numeral converters were SUCCESSFUL for numbers 1-3999.")
 else:
-    print("Roman Numeral converters failed for numbers 1-3999.  See reasons above.")
+    print("Roman Numeral converters FAILED for numbers 1-3999.  See reasons above.")
 
 
 
@@ -186,9 +195,9 @@ while number != "q":
 
 # The longest roman numeral is 15 digits. So D can be [2..16] looping through
 # just 1 digit or all the way up to 15 digits.
-D = 8
+digits = 8
 N = 7
-for i in range(1, D):
+for i in range(1, digits):
     # There are seven possible roman numerals (I, V, X, L, C, D, M).
     # This loops through all possible combinations (this number system is close to base seven).
     for j in range (0, N**i):
